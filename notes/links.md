@@ -13,6 +13,9 @@
 
 ## 📋 About JAVA
 
+### 🔗 HashMap 순회 방법
+[Java - HashMap 순회, 3가지 방법](https://codechacha.com/ko/java-map-hashmap-loop/)
+
 ### 🔗 Generic Method & Class
 [Generics](https://st-lab.tistory.com/153)
 
@@ -28,6 +31,7 @@
 ### 🔗 JSON 다루기 (`simple-json`)
 1. [json <-> map](https://hianna.tistory.com/626)
 2. [json <-> string](https://3edc.tistory.com/15)
+3. [JSONObject, JSONArray 데이터 입출력 만들기](https://shlee0882.tistory.com/45)
 
 ---
 
