@@ -129,7 +129,7 @@ public class Api {
         JSONArray pairsJSON = jsons.commandsToJSONArray(commands);
         map.put("commands", pairsJSON);
         JSONObject data = new JSONObject(map);
-//        System.out.println(data.toString());
+        System.out.println(data.toString());
 
         OutputStream os = httpsConn.getOutputStream();
         byte[] input = data.toString().getBytes("utf-8");

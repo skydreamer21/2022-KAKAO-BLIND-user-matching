@@ -16,6 +16,7 @@ public class Main {
     static Util utils = new Util();
     static Api APIs = new Api();
     static Match match = new Match();
+    static Grade grade = new Grade();
     static String AUTH_KEY;
 
     static int problem;
@@ -23,6 +24,7 @@ public class Main {
     static int gameTime = 0; // matchAPI 호출 시 1씩 증가
     static HashMap<Integer, Integer> waitingList = new HashMap<>();
     static HashMap<Integer, Integer> userGrade = new HashMap<>();
+    static HashMap<Integer, Integer> userScore = new HashMap<>();
 
     static final String AUTH_TOKEN = "3ebf8579866e4e88c49da86d2a8b94fe";
     static final String BASE_URL = "https://huqeyhi95c.execute-api.ap-northeast-2.amazonaws.com/prod";
@@ -49,7 +51,7 @@ public class Main {
         AUTH_KEY = (String) start.get("auth_key");
         int time = (int) ((long) start.get("time"));
         System.out.printf("authKey : %s, time : %d\n", AUTH_KEY, time);
-        match.initUserGrade(userGrade, problem);
+        grade.initUserInfo(userGrade, userScore, problem);
 
         // matchAPI 호출로 매칭 시작
         APIs.matchAPI(AUTH_KEY, new ArrayList<>());
@@ -67,13 +69,14 @@ public class Main {
         for (int t = gameTime; t<MAX_TIME; t++) {
             JSONObject gameResult = APIs.getInfoAPI(AUTH_KEY, GAME_RESULT);
             System.out.println(gameResult.toString());
+            grade.editGrade(AUTH_KEY, userGrade, userScore, (JSONArray) gameResult.get(GAME_RESULT));
             /*
             1. waiting_line을 받아서 적절한 user Match
             2. game_result를 받아서 user_grade 수정
              */
             JSONObject waiting = APIs.getInfoAPI(AUTH_KEY, WAITING_LINE);
             System.out.println(waiting.toString());
-            match.matchUsers(AUTH_KEY, userGrade, (JSONArray) waiting.get("waiting_line"), gameTime);
+            match.matchUsers(AUTH_KEY, userScore, (JSONArray) waiting.get(WAITING_LINE), gameTime);
             gameTime++;
             utils.printTime(gameTime);
         }

@@ -32,23 +32,19 @@ public class Match {
         }
     }
 
-    public void matchUsers(String AUTH_KEY, HashMap<Integer, Integer> userGrade, JSONArray waiting, int gameTime) throws IOException, ParseException {
+    public void matchUsers(String AUTH_KEY, HashMap<Integer, Integer> userScore, JSONArray waiting, int gameTime) throws IOException, ParseException {
         if (waiting.isEmpty()) {
             APIs.matchAPI(AUTH_KEY, new ArrayList<>());
             return;
         };
 
         int numOfWaiting = waiting.size();
-        WaitPlayer[] waitingList = WaitPlayer.getWaitingList(waiting, userGrade, gameTime);
+        WaitPlayer[] waitingList = WaitPlayer.getWaitingList(waiting, userScore, gameTime);
         Arrays.sort(waitingList);
         boolean[] isMatched = new boolean[numOfWaiting];
         ArrayList<int[]> matchPairs = new ArrayList<>();
 
         for (int first=0; first<numOfWaiting; first++) {
-            if (gameTime == 17) {
-                System.out.printf(COLOR_DEBUG + "id : %d, wt : %d\n", waitingList[first].id, waitingList[first].waitingTime);
-                System.out.println(this.matchGradeLimit.get(1));
-            }
             if (isMatched[first]) continue;
             int matchingGradeLimit = this.matchGradeLimit.get(waitingList[first].waitingTime);
             int maxSecondPlayerPriority = 0;
@@ -68,7 +64,7 @@ public class Match {
             }
 
             if (secondPlayerIdx == EMPTY) {
-                System.out.printf("매칭이 안되었습니다.\n");
+                System.out.printf("%d user는 매칭이 안되었습니다.\n", waitingList[first].id);
                 continue;
             }
 
@@ -86,19 +82,11 @@ public class Match {
 
     public int secondPlayerPriority (WaitPlayer secondPlayer, int matchingGradeLimit, int gradeDiff, int gameTime) {
         final int GRADE_WEIGHT = 1;
-        final int WAITING_TIME_WEIGHT = 1;
+        final int WAITING_TIME_WEIGHT = 1 ;
 
         double diffScore = ((matchingGradeLimit - gradeDiff) / matchingGradeLimit) * GRADE_WEIGHT;
         double waitingTimeScore = (secondPlayer.waitingTime / MAX_GAME_TIME) * WAITING_TIME_WEIGHT;
         return (int) Math.round(( diffScore + waitingTimeScore ) * 1000);
-    }
-
-    public void initUserGrade(HashMap<Integer, Integer> userGrade, int problem) {
-        int numOfUser = problem == 1 ? 30 : 900;
-        int initGrade = 40000;
-        for (int i=1; i<=numOfUser; i++) {
-            userGrade.put(i, initGrade);
-        }
     }
 
     public void initMatch(String AUTH_KEY, JSONArray firstWaiting) throws IOException, ParseException {
