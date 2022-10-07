@@ -18,6 +18,8 @@ import util.Util;
 import util.Json;
 
 public class Api {
+    static final int HTTP_TIME = 5000;
+
     static Util utils = new Util();
     static Json jsons = new Json();
     static final String AUTH_TOKEN = "3ebf8579866e4e88c49da86d2a8b94fe";
@@ -33,8 +35,8 @@ public class Api {
         httpsConn.setRequestMethod(POST);
         httpsConn.setRequestProperty("X-Auth-Token", AUTH_TOKEN);
         httpsConn.setRequestProperty("Content-Type", "application/json");
-        httpsConn.setConnectTimeout(1000);
-        httpsConn.setReadTimeout(1000);
+        httpsConn.setConnectTimeout(HTTP_TIME);
+        httpsConn.setReadTimeout(HTTP_TIME);
         httpsConn.setDoOutput(true);
 
         HashMap<String, Integer> map = new HashMap<>();
@@ -61,6 +63,8 @@ public class Api {
         URL url = new URL(BASE_URL + "/" + apiName);
         HttpsURLConnection httpsConn = (HttpsURLConnection) url.openConnection();
         httpsConn.setRequestMethod(GET);
+        httpsConn.setConnectTimeout(HTTP_TIME);
+        httpsConn.setReadTimeout(HTTP_TIME);
         httpsConn.setRequestProperty("Authorization", AUTH_KEY);
         httpsConn.setRequestProperty("Content-Type", "application/json");
 
@@ -84,8 +88,8 @@ public class Api {
         httpsConn.setRequestMethod(PUT);
         httpsConn.setRequestProperty("Authorization", AUTH_KEY);
         httpsConn.setRequestProperty("Content-Type", "application/json");
-        httpsConn.setConnectTimeout(1000);
-        httpsConn.setReadTimeout(1000);
+        httpsConn.setConnectTimeout(HTTP_TIME);
+        httpsConn.setReadTimeout(HTTP_TIME);
         httpsConn.setDoOutput(true);
 
         HashMap<String, JSONArray> map = new HashMap<>();
@@ -117,8 +121,8 @@ public class Api {
         httpsConn.setRequestMethod(PUT);
         httpsConn.setRequestProperty("Authorization", AUTH_KEY);
         httpsConn.setRequestProperty("Content-Type", "application/json");
-        httpsConn.setConnectTimeout(1000);
-        httpsConn.setReadTimeout(1000);
+        httpsConn.setConnectTimeout(HTTP_TIME);
+        httpsConn.setReadTimeout(HTTP_TIME);
         httpsConn.setDoOutput(true);
 
         HashMap<String, JSONArray> map = new HashMap<>();
