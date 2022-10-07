@@ -12,11 +12,14 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.ArrayList;
 
 import util.Util;
+import util.Json;
 
 public class Api {
     static Util utils = new Util();
+    static Json jsons = new Json();
     static final String AUTH_TOKEN = "3ebf8579866e4e88c49da86d2a8b94fe";
     static final String BASE_URL = "https://huqeyhi95c.execute-api.ap-northeast-2.amazonaws.com/prod";
     static final String GET = "GET";
@@ -74,7 +77,7 @@ public class Api {
         return (JSONObject) jsonParser.parse(response.toString());
     }
 
-    public JSONObject matchAPI(String AUTH_KEY, int[][] pairs) throws IOException, ParseException {
+    public JSONObject matchAPI(String AUTH_KEY, ArrayList<int[]> pairs) throws IOException, ParseException {
         URL url = new URL(BASE_URL + "/match");
         HttpsURLConnection httpsConn = (HttpsURLConnection) url.openConnection();
 
@@ -86,10 +89,10 @@ public class Api {
         httpsConn.setDoOutput(true);
 
         HashMap<String, JSONArray> map = new HashMap<>();
-        JSONArray pairsJSON = utils.pairsToJSONArray(pairs);
+        JSONArray pairsJSON = jsons.pairsToJSONArray(pairs);
         map.put("pairs", pairsJSON);
         JSONObject data = new JSONObject(map);
-//        System.out.println(data.toString());
+        System.out.println(data.toString());
 
         OutputStream os = httpsConn.getOutputStream();
         byte[] input = data.toString().getBytes("utf-8");
@@ -119,7 +122,7 @@ public class Api {
         httpsConn.setDoOutput(true);
 
         HashMap<String, JSONArray> map = new HashMap<>();
-        JSONArray pairsJSON = utils.commandsToJSONArray(commands);
+        JSONArray pairsJSON = jsons.commandsToJSONArray(commands);
         map.put("commands", pairsJSON);
         JSONObject data = new JSONObject(map);
 //        System.out.println(data.toString());

@@ -1,20 +1,26 @@
 package main;
 
 import javax.net.ssl.HttpsURLConnection;
-
 import org.json.simple.JSONObject;
+import org.json.simple.JSONArray;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import util.Util;
-import main.Api;
-
+import util.Json;
 
 public class Main {
     static HttpsURLConnection httpsConn;
     static Util utils = new Util();
     static Api APIs = new Api();
+    static Match match = new Match();
     static String AUTH_KEY;
-    static int time = 0; // matchAPI 호출 시 1씩 증가
+
+    static int problem;
+    static int numOfUsers;
+    static int gameTime = 0; // matchAPI 호출 시 1씩 증가
     static HashMap<Integer, Integer> waitingList = new HashMap<>();
     static HashMap<Integer, Integer> userGrade = new HashMap<>();
 
@@ -36,12 +42,31 @@ public class Main {
 
 
     public static void main(String[] argv) throws Exception{
+        problem = 1;
+        numOfUsers = problem == 1 ? 30 : 900;
 
-        JSONObject start = APIs.startAPI(1);
+        JSONObject start = APIs.startAPI(problem);
         AUTH_KEY = (String) start.get("auth_key");
         int time = (int) ((long) start.get("time"));
         System.out.printf("authKey : %s, time : %d\n", AUTH_KEY, time);
+        match.initUserGrade(userGrade, problem);
 
+        // matchAPI 호출로 매칭 시작
+        APIs.matchAPI(AUTH_KEY, new ArrayList<>());
+        gameTime++;
+        utils.printTime(gameTime);
+        // 첫번째 waiting Line
+        JSONObject resJson = APIs.getInfoAPI(AUTH_KEY, WAITING_LINE);
+        // 첫번째 매칭은 user에 대해 아는 정보가 없기 때문에 임의로 진행
+        match.initMatch(AUTH_KEY, (JSONArray) resJson.get("waiting_line"));
+        gameTime++;
+        utils.printTime(gameTime);
+
+        JSONObject waiting = APIs.getInfoAPI(AUTH_KEY, WAITING_LINE);
+        System.out.println(waiting.toString());
+
+
+        /*
         JSONObject userInfo = APIs.getInfoAPI(AUTH_KEY, USER_INFO);
         System.out.println(userInfo.toString());
 
@@ -81,5 +106,6 @@ public class Main {
 
         JSONObject userInfo2 = APIs.getInfoAPI(AUTH_KEY, USER_INFO);
         System.out.println(COLOR_INFO + userInfo2.toString());
+         */
     }
 }
