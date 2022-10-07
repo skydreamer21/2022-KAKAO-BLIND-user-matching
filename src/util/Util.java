@@ -29,6 +29,10 @@ public class Util {
         System.out.println();
     }
 
+    public void printTime(int gameTime) {
+        System.out.println("**************");
+        System.out.printf("[TRACE] time : %d분\n",gameTime);
+        System.out.println("**************");
     }
 }
 
