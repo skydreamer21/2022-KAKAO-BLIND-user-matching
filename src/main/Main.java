@@ -34,6 +34,7 @@ public class Main {
     static final String WAITING_LINE = "waiting_line";
     static final String GAME_RESULT = "game_result";
     static final String USER_INFO = "user_info";
+    static final String SCORE = "score";
 
     static final String COLOR_INFO = "INFO ---> ";
     static final String COLOR_DEBUG = "DEBUG ---> ";
@@ -65,8 +66,8 @@ public class Main {
         gameTime++;
         utils.printTime(gameTime);
 
-        int MAX_TIME = 50;
-        for (int t = gameTime; t<MAX_TIME; t++) {
+        int MAX_TIME_FOR_MATCH = 555;
+        for (int t = gameTime; t <= MAX_TIME_FOR_MATCH; t++) {
             JSONObject gameResult = APIs.getInfoAPI(AUTH_KEY, GAME_RESULT);
             System.out.println(gameResult.toString());
             grade.editGrade(AUTH_KEY, userGrade, userScore, (JSONArray) gameResult.get(GAME_RESULT));
@@ -81,9 +82,25 @@ public class Main {
             utils.printTime(gameTime);
         }
 
+        // time 556 부터는 매칭 불가, 게임 결과 확인 및 등급 수정만 가능
+        int MAX_TIME = 595;
+        for (int t = gameTime; t <= MAX_TIME; t++) {
+            JSONObject gameResult = APIs.getInfoAPI(AUTH_KEY, GAME_RESULT);
+            System.out.println(gameResult.toString());
+            grade.editGrade(AUTH_KEY, userGrade, userScore, (JSONArray) gameResult.get(GAME_RESULT));
 
-        JSONObject waiting = APIs.getInfoAPI(AUTH_KEY, WAITING_LINE);
-        System.out.println(waiting.toString());
+            APIs.matchAPI(AUTH_KEY, new ArrayList<>());
+            gameTime++;
+            utils.printTime(gameTime);
+        }
+
+        // 풀이 score 확인
+        JSONObject score = APIs.getInfoAPI(AUTH_KEY, SCORE);
+        System.out.println(score.toString());
+
+        // matchAPI를 사용하여 서버 종료
+        APIs.matchAPI(AUTH_KEY, new ArrayList<>());
+
 
 
         /*

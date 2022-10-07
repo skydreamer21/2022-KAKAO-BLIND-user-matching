@@ -20,6 +20,7 @@ public class Match {
 
     static final String COLOR_MATCH = "MATCH ---> ";
     static final String COLOR_DEBUG = "DEBUG ---> ";
+    static final String COLOR_WARNING = "WARNING ---> ";
 
     public Match() {
         System.out.printf("실행??\n");
@@ -45,6 +46,7 @@ public class Match {
         ArrayList<int[]> matchPairs = new ArrayList<>();
 
         for (int first=0; first<numOfWaiting; first++) {
+            if (waitingList[first].waitingTime > 15) continue;
             if (isMatched[first]) continue;
             int matchingGradeLimit = this.matchGradeLimit.get(waitingList[first].waitingTime);
             int maxSecondPlayerPriority = 0;
@@ -64,7 +66,7 @@ public class Match {
             }
 
             if (secondPlayerIdx == EMPTY) {
-                System.out.printf("%d user는 매칭이 안되었습니다.\n", waitingList[first].id);
+                System.out.printf(COLOR_WARNING + "%d user는 매칭이 안되었습니다.\n", waitingList[first].id);
                 continue;
             }
 
