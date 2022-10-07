@@ -57,10 +57,27 @@ public class Main {
         utils.printTime(gameTime);
         // 첫번째 waiting Line
         JSONObject resJson = APIs.getInfoAPI(AUTH_KEY, WAITING_LINE);
+//        match.matchUsers(AUTH_KEY, userGrade, (JSONArray) resJson.get("waiting_line"), gameTime);
         // 첫번째 매칭은 user에 대해 아는 정보가 없기 때문에 임의로 진행
         match.initMatch(AUTH_KEY, (JSONArray) resJson.get("waiting_line"));
         gameTime++;
         utils.printTime(gameTime);
+
+        int MAX_TIME = 50;
+        for (int t = gameTime; t<MAX_TIME; t++) {
+            JSONObject gameResult = APIs.getInfoAPI(AUTH_KEY, GAME_RESULT);
+            System.out.println(gameResult.toString());
+            /*
+            1. waiting_line을 받아서 적절한 user Match
+            2. game_result를 받아서 user_grade 수정
+             */
+            JSONObject waiting = APIs.getInfoAPI(AUTH_KEY, WAITING_LINE);
+            System.out.println(waiting.toString());
+            match.matchUsers(AUTH_KEY, userGrade, (JSONArray) waiting.get("waiting_line"), gameTime);
+            gameTime++;
+            utils.printTime(gameTime);
+        }
+
 
         JSONObject waiting = APIs.getInfoAPI(AUTH_KEY, WAITING_LINE);
         System.out.println(waiting.toString());
