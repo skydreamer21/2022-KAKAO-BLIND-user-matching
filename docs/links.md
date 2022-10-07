@@ -28,6 +28,11 @@
 ### 🔗 자바 외부 라이브러리 추가
 [IntelliJ에서 자바(jar) 라이브러리 추가하는 방법](https://codechacha.com/ko/how-to-add-jar-in-intellij/)
 
+---
+## 📋 JSON 다루기 - `simple-json`
+### 🔗 `simple-json` entrySet() 사용법
+[Java Code Examples for org.json.simple.JSONObject#entrySet()](https://www.programcreek.com/java-api-examples/?class=org.json.simple.JSONObject&method=entrySet)
+
 ### 🔗 JSON 다루기 (`simple-json`)
 1. [json <-> map](https://hianna.tistory.com/626)
 2. [json <-> string](https://3edc.tistory.com/15)
@@ -44,3 +49,9 @@
 
 ### 🔗 JSON `POST` Request
 [JAVA JSON POST 보내기](https://velog.io/@noah_ark/JAVA-JSON-POST-%EB%B3%B4%EB%82%B4%EA%B8%B0)
+
+
+---
+## 📋 markdown
+### 🔗 마크다운 표 입력
+[마크다운 Markdown 표(Table) 입력](https://young-cow.tistory.com/25)
