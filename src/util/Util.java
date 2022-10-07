@@ -12,6 +12,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
 
 public class Util {
+    static final String COLOR_TIME = "TIME ---> ";
+
     public <T> void printFields(T o) {
         String className = o.getClass().getName();
         System.out.printf("[INFO] this is Fields about %s\n", className);
@@ -30,8 +32,8 @@ public class Util {
     }
 
     public void printTime(int gameTime) {
-        System.out.println("**************");
-        System.out.printf("[TRACE] time : %d분\n",gameTime);
+        System.out.println("\n\n**************");
+        System.out.printf(COLOR_TIME + "time : %d분\n",gameTime);
         System.out.println("**************");
     }
 }

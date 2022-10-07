@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import main.WaitPlayer;
+
 public class Json {
 //    public void waitingParser()
 
