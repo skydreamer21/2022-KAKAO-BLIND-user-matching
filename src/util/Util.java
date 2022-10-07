@@ -2,6 +2,7 @@ package util;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -28,33 +29,6 @@ public class Util {
         System.out.println();
     }
 
-    public JSONArray commandsToJSONArray(HashMap<Integer, Integer> commands) {
-        JSONArray jsonArray = new JSONArray();
-
-        for (Entry<Integer, Integer> entry : commands.entrySet()) {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("id", entry.getKey());
-            jsonObject.put("grade", entry.getValue());
-            jsonArray.add(jsonObject);
-        }
-
-        return jsonArray;
-    }
-
-    public JSONArray pairsToJSONArray(int[][] arr) {
-        int len = arr.length;
-
-        JSONArray jsonArray = new JSONArray();
-        for (int i=0; i<len; i++) {
-            jsonArray.add(intArrToJson(arr[i]));
-        }
-        return jsonArray;
-    }
-
-    public JSONArray intArrToJson (int[] arr) {
-        JSONArray jsonArray = new JSONArray();
-        for (int num : arr) jsonArray.add(num);
-        return jsonArray;
     }
 }
 
