@@ -20,6 +20,8 @@ public class Grade {
     static final int VARIATION = 20000;
     static final int MAX_GAME_TIME = 40;
 
+    static final String COLOR_DEBUG = "DEBUG ---> ";
+
     public void editGrade (String AUTH_KEY, HashMap<Integer, Integer> userGrade, HashMap<Integer, Integer> userScore, JSONArray gameResults) throws IOException, ParseException {
         if (gameResults.isEmpty()) return;
 
@@ -32,19 +34,21 @@ public class Grade {
             JSONObject result = (JSONObject) o;
             int loseUserId = (int)(long) result.get("lose");
             int winUserId = (int)(long) result.get("win");
-            int[] calculatedScore = calculateGrade(result, userGrade);
+            int[] calculatedScore = calculateScore(result, userScore);
 
             int[] calculatedGrade = new int[2];
-            double gradeScoreRatio = MAX_GRADE / MAX_SCORE;
+            double gradeScoreRatio = (double) MAX_GRADE / MAX_SCORE;
             for (int i=0; i<2; i++) {
                 int id = i==WINNER ? winUserId : loseUserId;
                 int grade = userGrade.get(id);
                 int score = userScore.get(id);
+//                System.out.printf(COLOR_DEBUG + "[i : %d] grade diff cal : %f\n",i, (calculatedScore[i] - score)*gradeScoreRatio);
                 int gradeDiff = (int) Math.round((calculatedScore[i] - score) * gradeScoreRatio);
+//                System.out.printf(COLOR_DEBUG + "[i : %d] gradeDiff : %d\n", i, gradeDiff);
                 calculatedGrade[i] = i==WINNER ? Math.min(grade + gradeDiff, MAX_GRADE) : Math.max(grade + gradeDiff, MIN_GRADE);
                 userGrade.put(id, calculatedGrade[i]);
             }
-
+//            System.out.printf(COLOR_DEBUG + "grade winner : %d, grade loser : %d\n", calculatedScore[WINNER], calculatedScore[LOSER]);
             userScore.put(winUserId, calculatedScore[WINNER]);
             userScore.put(loseUserId, calculatedScore[LOSER]);
             commands.put(winUserId, calculatedGrade[WINNER]);
@@ -54,31 +58,31 @@ public class Grade {
         apis.changeGradeAPI(AUTH_KEY, commands);
     }
 
-    public int[] calculateGrade(JSONObject result, HashMap<Integer, Integer> userGrade) {
+    public int[] calculateScore(JSONObject result, HashMap<Integer, Integer> userScore) {
         int takenTime = (int)(long) result.get("taken"); // 추정 점수치
         int loseUserId = (int)(long) result.get("lose");
         int winUserId = (int)(long) result.get("win");
 
-        int loseUserGrade = userGrade.get(loseUserId);
-        int winUserGrade = userGrade.get(winUserId);
-        int diff = winUserGrade - loseUserGrade;
+        int loseUserScore = userScore.get(loseUserId);
+        int winUserScore = userScore.get(winUserId);
+        int diff = winUserScore - loseUserScore;
 
-        winUserGrade = Math.min(winUserGrade + DEFAULT, MAX_SCORE);
-        loseUserGrade = Math.max(loseUserGrade - DEFAULT, MIN_SCORE);
+        winUserScore = Math.min(winUserScore + DEFAULT, MAX_SCORE);
+        loseUserScore = Math.max(loseUserScore - DEFAULT, MIN_SCORE);
 
         // 1. 실력차와 게임결과과 동일할 때
         if (diff > 0) {
             // 1-1. 실력차가 많이 날때,
             if (diff > VARIATION) {
-                return new int[] {winUserGrade, loseUserGrade};
+                return new int[] {winUserScore, loseUserScore};
             }
 
             // 1-2. 비슷할 때
             else {
                 double ratio = (MAX_DIFF - diff) / MAX_DIFF;
                 int gameScore = (int) Math.round(SCORE_PER_GAME * ratio);
-                winUserGrade = Math.min(winUserGrade + gameScore, MAX_SCORE);
-                loseUserGrade = Math.max(loseUserGrade - gameScore, MIN_SCORE);
+                winUserScore = Math.min(winUserScore + gameScore, MAX_SCORE);
+                loseUserScore = Math.max(loseUserScore - gameScore, MIN_SCORE);
             }
         }
 
@@ -86,11 +90,11 @@ public class Grade {
         else {
             double ratio = diff / MAX_DIFF;
             int gameScore = (int) Math.round(SCORE_PER_GAME * (1+ratio));
-            winUserGrade = Math.min(winUserGrade + gameScore, MAX_SCORE);
-            loseUserGrade = Math.max(loseUserGrade - gameScore, MIN_SCORE);
+            winUserScore = Math.min(winUserScore + gameScore, MAX_SCORE);
+            loseUserScore = Math.max(loseUserScore - gameScore, MIN_SCORE);
         }
 
-        return new int[] {winUserGrade, loseUserGrade};
+        return new int[] {winUserScore, loseUserScore};
     }
 
     public int getGradeDiffExpected (int time) {
